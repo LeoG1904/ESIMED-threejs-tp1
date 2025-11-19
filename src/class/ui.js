@@ -37,4 +37,22 @@ export class Ui{
                 onChange(params.texture, params.repeats);
             });
     }
+    addSunUI(params, onChange) {
+        const folder = this.GUI.addFolder("Sun");
+        folder.addColor(params, "color")  
+            .name("Color")
+            .onChange(() => onChange(params));
+        folder.add(params, "intensity", 0, 10, 0.1)
+            .name("Intensity")
+            .onChange(() => onChange(params));
+
+        folder.add(params, "x", -100, 100, 1)
+            .name("X")
+            .onChange(() => onChange(params));
+
+        folder.add(params, "z", -100, 100, 1)
+            .name("Z")
+            .onChange(() => onChange(params));
+    }
+
 }

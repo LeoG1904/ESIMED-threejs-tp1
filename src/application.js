@@ -31,6 +31,8 @@ export class Application {
             this.groundParams,
             this.scene.changeGround.bind(this.scene)
         );
+        this.ui.addSunUI(this.sunParams, this.scene.changeSun.bind(this.scene));
+
 
 
         this.renderer.setAnimationLoop(this.render.bind(this))
@@ -63,6 +65,13 @@ export class Application {
         this.skyParams = {
             file: this.skyboxFiles[0]
         }
+
+        this.sunParams = {
+            intensity: 2.0,
+            x: 3,
+            z: 0,
+            color: "#ffffff"
+        };
     }
 
 }

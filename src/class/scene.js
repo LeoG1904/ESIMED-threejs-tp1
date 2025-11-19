@@ -28,27 +28,37 @@ export class Scene{
     }
 
     addDirectionalLight(){
-        const sun = new THREE.DirectionalLight(0xffffff,2.0)
-        sun.position.set(20,100,0)
-        sun.target.position.set(0,0,0)
-        sun.castShadow = true;
+        this.sun = new THREE.DirectionalLight(0xffffff,2.0)
+        this.sun.position.set(20,100,0)
+        this.sun.target.position.set(0,0,0)
+        this.sun.castShadow = true;
 
         // Optionnel : ajuster la qualité
-        sun.shadow.mapSize.width = 2048;
-        sun.shadow.mapSize.height = 2048;
+        this.sun.shadow.mapSize.width = 2048;
+        this.sun.shadow.mapSize.height = 2048;
 
         // Optionnel : étendre la zone de projection
-        sun.shadow.camera.left = -100;
-        sun.shadow.camera.right = 100;
-        sun.shadow.camera.top = 100;
-        sun.shadow.camera.bottom = -100;
-        sun.shadow.camera.far = 300;
+        this.sun.shadow.camera.left = -100;
+        this.sun.shadow.camera.right = 100;
+        this.sun.shadow.camera.top = 100;
+        this.sun.shadow.camera.bottom = -100;
+        this.sun.shadow.camera.far = 300;
 
-        this.scene.add(sun)
+        this.scene.add(this.sun)
 
-        const sunHelper = new THREE.DirectionalLightHelper(sun, 5)
+        const sunHelper = new THREE.DirectionalLightHelper(this.sun, 5)
         this.scene.add(sunHelper)
     }
+
+    changeSun(params) {
+        if (!this.sun) return;
+
+        if (params.intensity !== undefined) this.sun.intensity = params.intensity;
+        if (params.x !== undefined) this.sun.position.x = params.x;
+        if (params.z !== undefined) this.sun.position.z = params.z;
+        if (params.color !== undefined) this.sun.color.set(params.color); // applique la couleur
+    }
+
 
     addGround(texture, repeats) {
         const geometry = new THREE.PlaneGeometry(5000, 5000);
