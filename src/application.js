@@ -28,6 +28,7 @@ export class Application {
         this.ui.addSkyboxUI(this.skyboxFiles,this.skyParams,this.scene.addSkybox.bind(this.scene))
         this.ui.addGroundUI(this.groundTextures,this.groundParams,this.scene.changeGround.bind(this.scene));
         this.ui.addSunUI(this.sunParams, this.scene.changeSun.bind(this.scene));
+        this.ui.addSelectionInfo();
 
         this.selectedObject = null
         this.selectedMesh = null
@@ -108,9 +109,18 @@ export class Application {
 
                 // Changer le matériau du mesh sélectionné (exemple : jaune)
                 mesh.material = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+                this.ui.updateSelection(this.selectedObject);
+            }else {
+                // Si rien n'est sélectionné
+                if (this.selectedMesh && this.selectedMeshMaterial) {
+                    this.selectedMesh.material = this.selectedMeshMaterial;
+                }
+                this.selectedObject = null;
+                this.selectedMesh = null;
+                this.selectedMeshMaterial = null;
+
+                this.ui.updateSelection(null);
             }
         }
     }
-
-
 }

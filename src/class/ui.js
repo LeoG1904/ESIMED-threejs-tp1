@@ -55,4 +55,44 @@ export class Ui{
             .onChange(() => onChange(params));
     }
 
+    addSelectionInfo() {
+        this.selectionFolder = this.GUI.addFolder("Selected Object");
+
+        // Les champs affichés
+        this.selectionData = {
+            name: "",
+            position: "",
+            rotation: "",
+            scale: ""
+        };
+
+        this.selectionFolder.add(this.selectionData, "name").listen();
+        this.selectionFolder.add(this.selectionData, "position").listen();
+        this.selectionFolder.add(this.selectionData, "rotation").listen();
+        this.selectionFolder.add(this.selectionData, "scale").listen();
+
+        // Cacher par défaut
+        this.selectionFolder.hide();
+    }
+
+    // Mettre à jour le panneau
+    updateSelection(object) {
+        if (object) {
+            this.selectionData.name = object.name || "Unnamed";
+            this.selectionData.position = object.position
+                ? `x: ${object.position.x.toFixed(2)}, y: ${object.position.y.toFixed(2)}, z: ${object.position.z.toFixed(2)}`
+                : "";
+            this.selectionData.rotation = object.rotation
+                ? `x: ${object.rotation.x.toFixed(2)}, y: ${object.rotation.y.toFixed(2)}, z: ${object.rotation.z.toFixed(2)}`
+                : "";
+            this.selectionData.scale = object.scale
+                ? `x: ${object.scale.x.toFixed(2)}, y: ${object.scale.y.toFixed(2)}, z: ${object.scale.z.toFixed(2)}`
+                : "";
+
+            this.selectionFolder.show();
+        } else {
+            this.selectionFolder.hide();
+        }
+    }
+
 }
