@@ -148,24 +148,27 @@ export class Scene{
         }
     }
     exportScene() {
-        const exportData = {
-            nodes: []
-        };
+        const exportData = { nodes: [] };
 
-        // Parcourir tous les objets de la scène
         this.scene.traverse(obj => {
             if (obj.isMesh && obj.userData.isSelectable) {
-                const node = {
+                const worldPos = new THREE.Vector3();
+                const worldQuat = new THREE.Quaternion();
+                const worldScale = new THREE.Vector3();
+
+                obj.userData.object.updateMatrixWorld(); // s'assurer que le world matrix est à jour
+                obj.userData.object.matrixWorld.decompose(worldPos, worldQuat, worldScale);
+
+                exportData.nodes.push({
                     name: obj.userData.object.name || "Unnamed",
-                    position: `${obj.position.x},${obj.position.y},${obj.position.z}`,
-                    rotation: `${obj.quaternion.x},${obj.quaternion.y},${obj.quaternion.z},${obj.quaternion.w}`,
-                    scale: `${obj.scale.x},${obj.scale.y},${obj.scale.z}`
-                };
-                exportData.nodes.push(node);
+                    position: `${worldPos.x},${worldPos.y},${worldPos.z}`,
+                    rotation: `${worldQuat.x},${worldQuat.y},${worldQuat.z},${worldQuat.w}`,
+                    scale: `${worldScale.x},${worldScale.y},${worldScale.z}`
+                });
             }
         });
 
-        // Créer le fichier JSON et déclencher le téléchargement
+        // Télécharger le JSON
         const jsonStr = JSON.stringify(exportData, null, 2);
         const blob = new Blob([jsonStr], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -177,4 +180,5 @@ export class Scene{
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
+
 }
