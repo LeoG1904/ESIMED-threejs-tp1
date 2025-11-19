@@ -135,6 +135,15 @@ export class Scene{
                 );
             }
 
+            instance.traverse(o => {
+                if (o.isMesh) {
+                    o.userData = {
+                        isSelectable: true,
+                        object: instance,  // référence au mesh/cloné complet
+                    };
+                }
+            });
+
             this.scene.add(instance);
         }
     }

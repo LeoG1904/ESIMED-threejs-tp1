@@ -26,13 +26,17 @@ export class Application {
 
         this.ui = new Ui()
         this.ui.addSkyboxUI(this.skyboxFiles,this.skyParams,this.scene.addSkybox.bind(this.scene))
-        this.ui.addGroundUI(
-            this.groundTextures,
-            this.groundParams,
-            this.scene.changeGround.bind(this.scene)
-        );
+        this.ui.addGroundUI(this.groundTextures,this.groundParams,this.scene.changeGround.bind(this.scene));
         this.ui.addSunUI(this.sunParams, this.scene.changeSun.bind(this.scene));
 
+        this.selectedObject = null
+        this.selectedMesh = null
+        this.selectedMeshMaterial = null
+
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+
+        window.addEventListener('click', this.onClick.bind(this));
 
 
         this.renderer.setAnimationLoop(this.render.bind(this))
@@ -73,5 +77,40 @@ export class Application {
             color: "#ffffff"
         };
     }
+
+    onClick(event) {
+        // Normaliser la position de la souris (-1 à 1)
+        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+        // Mettre à jour le raycaster
+        this.raycaster.setFromCamera(this.mouse, this.camera.camera);
+
+        // Récupérer tous les objets de la scène
+        const intersects = this.raycaster.intersectObjects(this.scene.scene.children, true);
+
+        if (intersects.length > 0) {
+            // Chercher le premier mesh "sélectable"
+            const hit = intersects.find(i => i.object.userData.isSelectable);
+
+            if (hit) {
+                const mesh = hit.object;
+
+                // Restaurer l'ancien matériau si nécessaire
+                if (this.selectedMesh && this.selectedMeshMaterial) {
+                    this.selectedMesh.material = this.selectedMeshMaterial;
+                }
+
+                // Sauvegarder le mesh et son matériau original
+                this.selectedObject = mesh.userData.object;
+                this.selectedMesh = mesh;
+                this.selectedMeshMaterial = mesh.material;
+
+                // Changer le matériau du mesh sélectionné (exemple : jaune)
+                mesh.material = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+            }
+        }
+    }
+
 
 }

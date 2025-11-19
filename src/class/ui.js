@@ -39,7 +39,7 @@ export class Ui{
     }
     addSunUI(params, onChange) {
         const folder = this.GUI.addFolder("Sun");
-        folder.addColor(params, "color")  
+        folder.addColor(params, "color")
             .name("Color")
             .onChange(() => onChange(params));
         folder.add(params, "intensity", 0, 10, 0.1)
