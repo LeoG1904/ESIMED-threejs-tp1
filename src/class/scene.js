@@ -1,5 +1,5 @@
 import * as THREE from "three/webgpu";
-import {createStandardMaterial, loadGltf} from "../tools.js";
+import {createStandardMaterial, loadGltf, textureloader} from "../tools.js";
 
 export class Scene{
 
@@ -32,16 +32,16 @@ export class Scene{
         sun.position.set(20,100,0)
         sun.target.position.set(0,0,0)
         sun.castShadow = true;
-        
+
         // Optionnel : ajuster la qualité
         sun.shadow.mapSize.width = 2048;
         sun.shadow.mapSize.height = 2048;
 
-        // Optionnel : étendre la zone de projection (important pour grandes scènes)
-        sun.shadow.camera.left = -200;
-        sun.shadow.camera.right = 200;
-        sun.shadow.camera.top = 200;
-        sun.shadow.camera.bottom = -200;
+        // Optionnel : étendre la zone de projection
+        sun.shadow.camera.left = -100;
+        sun.shadow.camera.right = 100;
+        sun.shadow.camera.top = 100;
+        sun.shadow.camera.bottom = -100;
         sun.shadow.camera.far = 300;
 
         this.scene.add(sun)
@@ -61,6 +61,22 @@ export class Scene{
         ground.receiveShadow = true;
 
         this.scene.add(ground);
+    }
+
+    addSkybox(filename){
+        const path = `/skybox/${filename}.jpg`;
+
+        textureloader.load(
+            path,
+            (texture) => {
+                texture.mapping = THREE.EquirectangularReflectionMapping;
+                this.scene.background = texture;
+            },
+            undefined,
+            (error) => {
+                console.error("Erreur skybox :", error);
+            }
+        );
     }
 
     async loadScene(url) {

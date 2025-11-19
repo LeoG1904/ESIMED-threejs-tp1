@@ -18,6 +18,7 @@ export class Application {
         this.scene.addAmbiantLight()
         this.scene.addDirectionalLight()
         this.scene.addGround(this.groundParams.texture,this.groundParams.repeats)
+        this.scene.addSkybox(this.skyParams.file)
 
         this.camera = new Camera()
         this.camera.setOrbitControls(this.renderer.domElement)
@@ -41,6 +42,16 @@ export class Application {
         this.groundParams = {
             texture: this.groundTextures[0],
             repeats: 1000
+        }
+
+        this.skyboxFiles = [
+            'DaySkyHDRI019A_2K-TONEMAPPED',
+            'DaySkyHDRI050A_2K-TONEMAPPED',
+            'NightSkyHDRI009_2K-TONEMAPPED'
+        ]
+
+        this.skyParams = {
+            file: this.skyboxFiles[0]
         }
     }
 
