@@ -29,7 +29,7 @@ export class Application {
         this.ui.addGroundUI(this.groundTextures,this.groundParams,this.scene.changeGround.bind(this.scene));
         this.ui.addSunUI(this.sunParams, this.scene.changeSun.bind(this.scene));
         this.ui.addSelectionInfo();
-        this.ui.addExportButton(this.scene.exportScene.bind(this.scene));
+        this.ui.addExportButton(() => this.scene.exportScene(this.exportParams));
 
 
         this.selectedObject = null
@@ -110,6 +110,18 @@ export class Application {
             z: 0,
             color: "#ffffff"
         };
+
+        // Créer les paramètres globaux à exporter
+        this.exportParams = {
+            ground: {
+                texture: this.groundParams.texture,
+                repeats: this.groundParams.repeats
+            },
+            skybox: {
+                file: this.skyParams.file
+            }
+        };
+
     }
 
     onClick(event) {

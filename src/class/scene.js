@@ -6,6 +6,7 @@ export class Scene{
     constructor() {
         this.scene = new THREE.Scene()
         this.loadedModels = {}
+        this.sun = null
 
 
     }
@@ -147,8 +148,11 @@ export class Scene{
             this.scene.add(instance);
         }
     }
-    exportScene() {
-        const exportData = { nodes: [] };
+    exportScene(params = {}) {
+        const exportData = {
+            params: params, // ajouter les paramètres globaux
+            nodes: []
+        };
 
         this.scene.traverse(obj => {
             if (obj.isMesh && obj.userData.isSelectable) {
@@ -156,14 +160,14 @@ export class Scene{
                 const worldQuat = new THREE.Quaternion();
                 const worldScale = new THREE.Vector3();
 
-                obj.userData.object.updateMatrixWorld(); // s'assurer que le world matrix est à jour
+                obj.userData.object.updateMatrixWorld();
                 obj.userData.object.matrixWorld.decompose(worldPos, worldQuat, worldScale);
 
                 exportData.nodes.push({
                     name: obj.userData.object.name || "Unnamed",
-                    position: `${worldPos.x},${worldPos.y},${worldPos.z}`,
-                    rotation: `${worldQuat.x},${worldQuat.y},${worldQuat.z},${worldQuat.w}`,
-                    scale: `${worldScale.x},${worldScale.y},${worldScale.z}`
+                    position: `${worldPos.x.toFixed(2)},${worldPos.y.toFixed(2)},${worldPos.z.toFixed(2)}`,
+                    rotation: `${worldQuat.x.toFixed(4)},${worldQuat.y.toFixed(4)},${worldQuat.z.toFixed(4)},${worldQuat.w.toFixed(4)}`,
+                    scale: `${worldScale.x.toFixed(2)},${worldScale.y.toFixed(2)},${worldScale.z.toFixed(2)}`
                 });
             }
         });
@@ -180,5 +184,6 @@ export class Scene{
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
+
 
 }
