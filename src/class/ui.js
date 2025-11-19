@@ -17,4 +17,24 @@ export class Ui{
                 onChange(value);
             });
     }
+    addGroundUI(files, params, onChange) {
+
+        const folder = this.GUI.addFolder("Ground");
+
+        // Liste des textures disponibles
+        folder
+            .add(params, "texture", files)
+            .name("Texture")
+            .onChange(() => {
+                onChange(params.texture, params.repeats);
+            });
+
+        // Contrôle du repeat
+        folder
+            .add(params, "repeats", 1, 1000, 1)
+            .name("Repeats")
+            .onChange(() => {
+                onChange(params.texture, params.repeats);
+            });
+    }
 }

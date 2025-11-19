@@ -26,6 +26,12 @@ export class Application {
 
         this.ui = new Ui()
         this.ui.addSkyboxUI(this.skyboxFiles,this.skyParams,this.scene.addSkybox.bind(this.scene))
+        this.ui.addGroundUI(
+            this.groundTextures,
+            this.groundParams,
+            this.scene.changeGround.bind(this.scene)
+        );
+
 
         this.renderer.setAnimationLoop(this.render.bind(this))
     }
@@ -37,9 +43,9 @@ export class Application {
     initParams(){
         this.groundTextures = [
             'aerial_grass_rock',
-            'brown_mud_leaves',
+            'brown_mud_leaves_01',
             'forest_floor',
-            'forrest_ground',
+            'forrest_ground_01',
             'gravelly_sand'
         ]
 

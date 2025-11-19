@@ -55,12 +55,17 @@ export class Scene{
 
         const material = createStandardMaterial(texture, repeats);
 
-        const ground = new THREE.Mesh(geometry, material);
-        ground.rotation.x = -Math.PI / 2; // rotation pour que le plan soit horizontal
+        this.ground = new THREE.Mesh(geometry, material);
+        this.ground.rotation.x = -Math.PI / 2; // rotation pour que le plan soit horizontal
+        this.ground.receiveShadow = true;
 
-        ground.receiveShadow = true;
+        this.scene.add(this.ground);
+    }
 
-        this.scene.add(ground);
+    changeGround(texture, repeats) {
+        if (!this.ground) return;
+
+        this.ground.material = createStandardMaterial(texture, repeats);
     }
 
     addSkybox(filename){
