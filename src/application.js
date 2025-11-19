@@ -33,12 +33,43 @@ export class Application {
         this.selectedObject = null
         this.selectedMesh = null
         this.selectedMeshMaterial = null
+        this.moveSelectedObject = false
 
         this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
 
         window.addEventListener('click', this.onClick.bind(this));
+        window.addEventListener('keydown', (event) => {
+            if (event.key.toLowerCase() === 'g') {
+                this.moveSelectedObject = !this.moveSelectedObject;
+            }
+        });
+        window.addEventListener('mousemove', (event) => {
+            if (!this.moveSelectedObject) return;
+            if (!this.selectedObject) return;
+            if (!this.scene.ground) return; // vérifier que le sol existe
 
+            // Normaliser la position de la souris
+            this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            this.mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            // Raycaster depuis la caméra
+            this.raycaster.setFromCamera(this.mouse, this.camera.camera);
+
+            // Intersect avec le sol uniquement
+            const intersects = this.raycaster.intersectObject(this.scene.ground);
+
+            if (intersects.length > 0) {
+                const point = intersects[0].point;
+
+                // Déplacer l'objet sélectionné
+                this.selectedObject.position.x = point.x;
+                this.selectedObject.position.z = point.z;
+
+                // Mettre à jour le panneau UI
+                this.ui.updateSelection(this.selectedObject);
+            }
+        });
 
         this.renderer.setAnimationLoop(this.render.bind(this))
     }
