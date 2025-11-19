@@ -1,4 +1,5 @@
 import * as THREE from "three/webgpu";
+import {createStandardMaterial} from "../tools.js";
 
 export class Scene{
 
@@ -18,6 +19,7 @@ export class Scene{
             flatShading : true
         } );
         const cube = new THREE.Mesh( geometry, material );
+        cube.position.set(0,1,0)
         this.scene.add( cube );
     }
 
@@ -27,4 +29,16 @@ export class Scene{
 
     }
 
+    addGround(texture, repeats) {
+        const geometry = new THREE.PlaneGeometry(5000, 5000);
+
+        const material = createStandardMaterial(texture, repeats);
+
+        const ground = new THREE.Mesh(geometry, material);
+        ground.rotation.x = -Math.PI / 2; // rotation pour que le plan soit horizontal
+
+        ground.receiveShadow = true;
+
+        this.scene.add(ground);
+    }
 }
