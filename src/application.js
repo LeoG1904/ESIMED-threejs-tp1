@@ -1,6 +1,7 @@
 import * as THREE from 'three/webgpu'
 import {Scene} from "./class/scene.js";
 import {Camera} from "./class/camera.js";
+import {Ui} from "./class/ui.js";
 
 export class Application {
     
@@ -22,6 +23,9 @@ export class Application {
 
         this.camera = new Camera()
         this.camera.setOrbitControls(this.renderer.domElement)
+
+        this.ui = new Ui()
+        this.ui.addSkyboxUI(this.skyboxFiles,this.skyParams,this.scene.addSkybox.bind(this.scene))
 
         this.renderer.setAnimationLoop(this.render.bind(this))
     }
