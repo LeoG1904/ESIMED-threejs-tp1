@@ -147,4 +147,34 @@ export class Scene{
             this.scene.add(instance);
         }
     }
+    exportScene() {
+        const exportData = {
+            nodes: []
+        };
+
+        // Parcourir tous les objets de la scène
+        this.scene.traverse(obj => {
+            if (obj.isMesh && obj.userData.isSelectable) {
+                const node = {
+                    name: obj.userData.object.name || "Unnamed",
+                    position: `${obj.position.x},${obj.position.y},${obj.position.z}`,
+                    rotation: `${obj.quaternion.x},${obj.quaternion.y},${obj.quaternion.z},${obj.quaternion.w}`,
+                    scale: `${obj.scale.x},${obj.scale.y},${obj.scale.z}`
+                };
+                exportData.nodes.push(node);
+            }
+        });
+
+        // Créer le fichier JSON et déclencher le téléchargement
+        const jsonStr = JSON.stringify(exportData, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'scene_export.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
 }

@@ -29,6 +29,8 @@ export class Application {
         this.ui.addGroundUI(this.groundTextures,this.groundParams,this.scene.changeGround.bind(this.scene));
         this.ui.addSunUI(this.sunParams, this.scene.changeSun.bind(this.scene));
         this.ui.addSelectionInfo();
+        this.ui.addExportButton(this.scene.exportScene.bind(this.scene));
+
 
         this.selectedObject = null
         this.selectedMesh = null

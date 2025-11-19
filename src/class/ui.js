@@ -95,4 +95,7 @@ export class Ui{
         }
     }
 
+    addExportButton(onClick) {
+        this.GUI.add({ exportScene: onClick }, 'exportScene').name('Export Scene');
+    }
 }
