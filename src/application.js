@@ -7,13 +7,16 @@ export class Application {
     constructor() {
         this.renderer = new THREE.WebGPURenderer({antialias: true})
         this.renderer.setSize(window.innerWidth, window.innerHeight)
+        this.renderer.shadowMap.enabled = true
         document.body.appendChild(this.renderer.domElement)
 
         this.initParams()
 
         this.scene = new Scene()
-        this.scene.addCube()
+        //this.scene.addCube()
+        this.scene.loadScene('/scenes/scene_1.json')
         this.scene.addAmbiantLight()
+        this.scene.addDirectionalLight()
         this.scene.addGround(this.groundParams.texture,this.groundParams.repeats)
 
         this.camera = new Camera()
@@ -37,7 +40,7 @@ export class Application {
 
         this.groundParams = {
             texture: this.groundTextures[0],
-            repeats: 10
+            repeats: 1000
         }
     }
 
