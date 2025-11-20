@@ -32,6 +32,24 @@ export class Application {
         this.ui.addExportButton(() => this.scene.exportScene(this.exportParams));
         this.ui.addClearButton(() => this.scene.clearScene());
 
+        const importInput = document.createElement('input');
+        importInput.type = 'file';
+        importInput.accept = '.json,application/json';
+        importInput.style.display = 'none';
+        document.body.appendChild(importInput);
+
+        importInput.addEventListener('change', async (event) => {
+            await this.scene.importScene(event, {
+                skybox: this.skyParams,
+                ground: this.groundParams,
+                sun: this.sunParams
+            });
+
+            importInput.value = '';
+        });
+
+        this.ui.addImportButton(() => importInput.click());
+
 
         this.selectedObject = null
         this.selectedMesh = null

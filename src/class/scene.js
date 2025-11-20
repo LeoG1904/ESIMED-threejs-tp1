@@ -201,4 +201,52 @@ export class Scene{
             this.scene.remove(obj);
         });
     }
+
+    async importScene(event, params) {
+
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const text = await file.text();
+        const data = JSON.parse(text);
+
+        this.clearScene();
+
+        //    → on convertit le fichier en blob URL
+        const blob = new Blob([text], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        await this.loadScene(url);
+
+        URL.revokeObjectURL(url);
+
+        if (data.params) {
+
+            // SKYBOX
+            if (data.params.skybox && params.skybox) {
+                params.skybox.file = data.params.skybox.file;
+                this.addSkybox(params.skybox.file);
+            }
+
+            // GROUND
+            if (data.params.ground && params.ground) {
+                params.ground.texture = data.params.ground.texture;
+                params.ground.repeats = data.params.ground.repeats;
+                this.changeGround(params.ground.texture, params.ground.repeats);
+            }
+
+            // SUN
+            if (data.params.sun && params.sun) {
+                params.sun.intensity = data.params.sun.intensity;
+                params.sun.x = data.params.sun.x;
+                params.sun.z = data.params.sun.z;
+                params.sun.color = data.params.sun.color;
+
+                this.changeSun(params.sun);
+            }
+        }
+    }
+
+
+
 }

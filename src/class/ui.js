@@ -101,4 +101,7 @@ export class Ui{
     addClearButton(onClick) {
         this.GUI.add({ clearScene: onClick }, 'clearScene').name('Clear Scene');
     }
+    addImportButton(onImport) {
+        this.GUI.add({ importScene: onImport }, 'importScene').name('Import Scene');
+    }
 }
