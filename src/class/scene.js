@@ -60,7 +60,6 @@ export class Scene{
         if (params.color !== undefined) this.sun.color.set(params.color); // applique la couleur
     }
 
-
     addGround(texture, repeats) {
         const geometry = new THREE.PlaneGeometry(5000, 5000);
 
@@ -148,6 +147,7 @@ export class Scene{
             this.scene.add(instance);
         }
     }
+
     exportScene(params = {}) {
         const exportData = {
             params: params, // ajouter les paramètres globaux
@@ -185,5 +185,20 @@ export class Scene{
         URL.revokeObjectURL(url);
     }
 
+    clearScene() {
+        const objectsToRemove = [];
 
+        this.scene.traverse(obj => {
+            if (obj.isMesh && obj.userData.isSelectable) {
+                objectsToRemove.push(obj.userData.object);
+            }
+        });
+
+        // Supprimer toutes les instances complètes (évite les doublons)
+        const unique = new Set(objectsToRemove);
+
+        unique.forEach(obj => {
+            this.scene.remove(obj);
+        });
+    }
 }

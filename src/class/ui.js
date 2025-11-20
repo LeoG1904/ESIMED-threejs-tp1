@@ -98,4 +98,7 @@ export class Ui{
     addExportButton(onClick) {
         this.GUI.add({ exportScene: onClick }, 'exportScene').name('Export Scene');
     }
+    addClearButton(onClick) {
+        this.GUI.add({ clearScene: onClick }, 'clearScene').name('Clear Scene');
+    }
 }

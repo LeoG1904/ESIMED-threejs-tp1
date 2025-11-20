@@ -30,6 +30,7 @@ export class Application {
         this.ui.addSunUI(this.sunParams, this.scene.changeSun.bind(this.scene));
         this.ui.addSelectionInfo();
         this.ui.addExportButton(() => this.scene.exportScene(this.exportParams));
+        this.ui.addClearButton(() => this.scene.clearScene());
 
 
         this.selectedObject = null
